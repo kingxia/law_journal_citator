@@ -14,7 +14,7 @@ class Logger():
     
     def log(self, message, to_console=False, to_file=True, include_date_time=True):
         if to_console:
-            print message
+            print(message)
         if to_file and self.current_file is not None:
             _file = open(self.current_file, 'a')
             if not include_date_time:
