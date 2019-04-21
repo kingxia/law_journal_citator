@@ -1,8 +1,15 @@
 from lib.journals import *
 import re
 
+def all_journals_regex():
+    return '(%s)' % (
+        '|'.join(map(lambda x: JOURNALS[x].short.replace('.', '\\.'), range(len(JOURNALS)))))
+
 def extract_cites(case):
     cites = []
+
+    if len([m.start() for m in re.finditer(all_journals_regex(), case['casebody']['data'])]) == 0:
+        return cites
 
     for i in JOURNALS:
         j_cites = [m.start() for m in re.finditer(JOURNALS[i].short, case['casebody']['data'])]
