@@ -1,3 +1,5 @@
+import datetime
+
 BULK_DATA_PATH = 'data/jurisdiction/'
 XZ_FILE_FROM_JD_FOLDER = 'data/data.jsonl.xz'
 
@@ -30,12 +32,12 @@ class Logger():
     def get_current_file_date(self):
         filename = self.current_file.split('/')[-1]
         file_head = filename.split('.')[0]
-        return constants_datetime.datetime.strptime(file_head, LOG_DATE_FORMAT)
+        return datetime.datetime.strptime(file_head, LOG_DATE_FORMAT)
 
     def set_file(self, filepath):
         self.current_file = filepath
 
     def get_date_time(self):
-        return constants_datetime.datetime.now().strftime(TIME_STORAGE_FORMAT)
+        return datetime.datetime.now().strftime(TIME_STORAGE_FORMAT)
 
 SERVER_LOGGER = Logger()
