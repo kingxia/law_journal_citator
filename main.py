@@ -30,26 +30,44 @@ def extract_citations(f, case_count=None):
             case = json.loads(str(line, 'utf8'))
             cites = extract_cites(case)
             ## Change this to ID later
-            cases[case['name']] = cites
+            cases[case['id']] = cites
 
             current += 1
             if case_count:
                 progress = (current * 100) / case_count
                 last_progress = ((current - 1) * 100) / case_count
                 if round(progress) > round(last_progress) and round(progress) % 5 == 0:
-                    log('\t%d%% done.' % round(progress, 2), to_console=True, to_file=False)
+                    log('\t%d%% done.' % round(progress), to_console=True, to_file=False)
     return cases
+
+def count_cites(journal):
+    count = 0
+    for case in journal:
+        count += len(journal[case])
+    return count
 
 def main():
     folders = get_all_bulk_data_folders()
+    journal_citations = {}
     for folder in folders:
         log('Extracting cases from %s.' % folder, to_console=True)
         case_count = get_case_count(folder_to_xz_path(folder))
         log('\tParsing %d cases.' % case_count, to_console=True)
         cases = extract_citations(folder_to_xz_path(folder), case_count=case_count)
-    for case in cases:
-        if len(cases[case]) > 0:
-            log('\t%s:\t%s' % (case, cases[case]), to_console=True, to_file=False)
+
+        for case in cases:
+            for cite in cases[case]:
+                if cite[0] not in journal_citations:
+                    journal_citations[cite[0]] = {}
+                if case not in journal_citations[cite[0]]:
+                    journal_citations[cite[0]][case] = []
+                journal_citations[cite[0]][case].append(cite[1])
+
+    for journal in journal_citations:
+        log('%s: %d cites.' % (
+            JOURNALS[journal].name,
+            count_cites(journal_citations[journal])),
+            to_console=True)
 
 if __name__ == '__main__':
     main()
