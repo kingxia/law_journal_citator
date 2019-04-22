@@ -15,7 +15,6 @@ def create_database(dst):
     cursor.execute(INSERT_NEXT_ID % (0, 1000))
     db.commit()
     db.close()
-    
 
 def get_all_bulk_data_folders():
     '''Return all the folders stored as data.
