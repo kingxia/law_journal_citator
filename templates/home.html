@@ -25,6 +25,27 @@
 </head>
 <body>
 <div ng-app="home" ng-controller="homeController as ctrl" class="ng-cloak outer-body">
-    <div class="title-segment"><div class="full-flex-row">Journal Citator</div>
+    <div class="title-segment"><div class="full-flex-row">Journal Citator</div></div>
+    <div class="search-box" style="padding-top: 12px">
+        <md-autocomplete flex
+              md-no-cache=true
+              md-selected-item="ctrl.journal"
+              md-search-text="ctrl.journalSearchText"
+              md-items="journal in ctrl.searchJournals(ctrl.journalSearchText)"
+              md-item-text="ctrl.displayJournal(journal)"
+              md-min-length="0"
+              placeholder="Select a journal"
+              class="md-block">
+            <md-item-template>
+                <span>{{ '{{journal.name}}' }}</span>
+                <span style="font-size: 12px">
+                    ({{ '{{journal.short}}' }})
+                </span>
+            </md-item-template>
+            <md-not-found>
+                <span>No matching journals found.</span>
+            </md-not-found>
+        </md-autocomplete>
+    </div>
 </div>
 </body>

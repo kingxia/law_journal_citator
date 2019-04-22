@@ -1,5 +1,6 @@
 import flask, json, os
 from flask import Flask, Response, request, render_template
+from backend.journals import *
 
 app = Flask(__name__)
 
@@ -8,7 +9,17 @@ debug = True
 
 ## Static Resources ##
 
+journal_data = [JOURNALS[j].__dict__ for j in JOURNALS]
 
+@app.route('/journals')
+def static_journals():
+    return json.dumps(journal_data)
+
+## API ##
+
+@app.route('/cites', methods=['POST'])
+def api_cites():
+    return None
 
 ## Individual Pages ##
 

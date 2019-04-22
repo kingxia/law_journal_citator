@@ -2,21 +2,8 @@
     align-items: center;
     display: flex;
     justify-content: flex-end;
-    //justify-content: center;
     padding-top: 4px;
     flex-wrap: wrap;
-}
-
-.county-selector {
-    display: flex;
-    margin-top: 28px;
-    margin-bottom: 48px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.left-align-break {
-    margin-right: auto;
 }
 
 .outer-body {
@@ -25,17 +12,6 @@
     padding-top: 16px;
     padding-left: 16px;
     text-align: center;
-}
-
-.searchbar {
-    display: flex;
-}
-
-.filter-options {
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 8px;
-    width: 150px;
 }
 
 .title-segment {
@@ -57,17 +33,6 @@
     padding-top: 8px;
 }
 
-.settlement-input {
-    width: 50px;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.settlement {
-    font-size: 28px;
-    text-decoration: underline;
-}
-
 .autocomplete-div {
     display: flex;
     flex-wrap: wrap;
@@ -78,8 +43,4 @@
     font-size: 16px;
     text-align: left;
     margin-bottom: 4px;
-}
-
-.double-space {
-    line-height: 2em;
 }
