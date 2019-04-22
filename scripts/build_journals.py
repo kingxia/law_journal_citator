@@ -1,6 +1,6 @@
 import string, re
 SOURCE = 'data/journal_data.txt'
-OUTPUT = 'scripts/output/journals.py'
+OUTPUT = 'output/journals.py'
 
 STARTER_CODE = '''from enum import IntEnum
 
