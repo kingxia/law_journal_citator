@@ -1,9 +1,21 @@
-import lzma, json, os
+import lzma, json, os, sqlite3
 
-from lib.constants import *
-from lib.extract import *
-from lib.journals import *
-from lib.logic import *
+from constants import *
+from extract import *
+from journals import *
+from logic import *
+
+def create_database(dst):
+    if os.path.exists(dst):
+        os.remove(dst)
+    db = sqlite3.connect(dst)
+    cursor = db.cursor()
+    cursor.execute(CREATE_CITES_TABLE)
+    cursor.execute(CREATE_NEXT_IDS_TABLE)
+    cursor.execute(INSERT_NEXT_ID % (0, 1000))
+    db.commit()
+    db.close()
+    
 
 def get_all_bulk_data_folders():
     '''Return all the folders stored as data.
@@ -22,15 +34,31 @@ def get_case_count(f):
             count += 1
     return count
 
-def extract_citations(f, case_count=None):
+def decision_to_year(s):
+    return int(s.split('-')[0])
+
+def extract_citations(src, dst, case_count=None):
     current = 0
     cases = {}
-    with lzma.open(f) as in_file:
+
+    db = sqlite3.connect(dst)
+    cursor = db.cursor()
+
+    cursor.execute('SELECT * FROM nextIds')
+    next_id = cursor.fetchone()[1]
+    
+    with lzma.open(src) as in_file:
         for line in in_file:
             case = json.loads(str(line, 'utf8'))
             cites = extract_cites(case)
-            ## Change this to ID later
-            cases[case['id']] = cites
+
+            for cite in cites:
+                cursor.execute(INSERT_CITATION % (
+                    next_id, cite[0], case['id'],
+                    case['jurisdiction']['id'],
+                    decision_to_year(case['decision_date']),
+                    cite[1]))
+                next_id += 1
 
             current += 1
             if case_count:
@@ -38,36 +66,20 @@ def extract_citations(f, case_count=None):
                 last_progress = ((current - 1) * 100) / case_count
                 if round(progress) > round(last_progress) and round(progress) % 5 == 0:
                     log('\t%d%% done.' % round(progress), to_console=True, to_file=False)
-    return cases
 
-def count_cites(journal):
-    count = 0
-    for case in journal:
-        count += len(journal[case])
-    return count
+    cursor.execute('UPDATE nextIds SET nextId = %d WHERE id = 0' % next_id)
+    db.commit()
+    db.close()
 
 def main():
+    create_database(DATABASE_PATH)
     folders = get_all_bulk_data_folders()
     journal_citations = {}
     for folder in folders:
         log('Extracting cases from %s.' % folder, to_console=True)
         case_count = get_case_count(folder_to_xz_path(folder))
         log('\tParsing %d cases.' % case_count, to_console=True)
-        cases = extract_citations(folder_to_xz_path(folder), case_count=case_count)
-
-        for case in cases:
-            for cite in cases[case]:
-                if cite[0] not in journal_citations:
-                    journal_citations[cite[0]] = {}
-                if case not in journal_citations[cite[0]]:
-                    journal_citations[cite[0]][case] = []
-                journal_citations[cite[0]][case].append(cite[1])
-
-    for journal in journal_citations:
-        log('%s: %d cites.' % (
-            JOURNALS[journal].name,
-            count_cites(journal_citations[journal])),
-            to_console=True)
+        extract_citations(folder_to_xz_path(folder), DATABASE_PATH, case_count=case_count)
 
 if __name__ == '__main__':
     main()

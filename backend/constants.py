@@ -10,6 +10,8 @@ COURSE_TIME_STORAGE_DELIMITER = '-'
 LOG_PATH = 'data/logs/'
 LOG_DATE_FORMAT = '%Y-%m-%d_log'
 
+DATABASE_PATH = 'data/citations.db'
+
 class Logger():
     def __init__(self):
         self.current_file = None
@@ -41,3 +43,20 @@ class Logger():
         return datetime.datetime.now().strftime(TIME_STORAGE_FORMAT)
 
 SERVER_LOGGER = Logger()
+
+CREATE_CITES_TABLE = '''
+CREATE TABLE citations(
+    id INTEGER PRIMARY KEY,
+    journalId INTEGER,
+    caseId INTEGER,
+    jurisdiction INTEGER,
+    year INTEGER,
+    position INTEGER);'''
+
+CREATE_NEXT_IDS_TABLE = '''
+CREATE TABLE nextIds(
+    id INTEGER PRIMARY KEY,
+    nextId INTEGER);'''
+
+INSERT_NEXT_ID = 'INSERT INTO nextIds (id, nextId) VALUES (%d, %d);'
+INSERT_CITATION = 'INSERT INTO citations (id, journalId, caseId, jurisdiction, year, position) VALUES (%d, %d, %d, %d, %d, %d);'
