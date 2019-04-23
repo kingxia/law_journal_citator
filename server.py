@@ -1,6 +1,8 @@
 import flask, json, os
-from flask import Flask, Response, request, render_template
-from backend.journals import *
+from flask import Flask, jsonify, Response, request, render_template
+from lib.constants import *
+from lib.journals import *
+from lib.frontend.cites import *
 
 app = Flask(__name__)
 
@@ -19,7 +21,7 @@ def static_journals():
 
 @app.route('/cites', methods=['POST'])
 def api_cites():
-    return None
+    return jsonify(get_cites(DATABASE_PATH, build_options(json.loads(request.data))))
 
 ## Individual Pages ##
 

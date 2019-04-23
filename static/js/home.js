@@ -19,6 +19,20 @@ app.controller('homeController', function($http, $scope) {
         return query ? self.journals.filter(self.findOr(query, 'name', 'short')) : self.journals;
     };
     
+    self.query = function() {
+        searchOptions = {};
+        if (self.journal) searchOptions['journalId'] = [self.journal.id];
+        if (self.jurisdiction) searchOptions['jurisdiction'] = [self.jurisdiction.id];
+        if (self.minYear) searchOptions['minYear'] = self.minYear;
+        if (self.maxYear) searchOptions['maxYear'] = self.maxYear;
+        
+        $http.post('/cites', searchOptions).then(function(data) {
+            self.queryResults = data.data;
+        }, function(error) {
+            self.queryError = error;
+        });
+    };
+    
     $http.get('/journals').then(function(data) {
         self.journals = data.data;
     });

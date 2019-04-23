@@ -9,3 +9,6 @@ def log(message, to_console=False, to_file=True, include_date_time=True):
 
 def date_to_log_filename(d):
     return '%s.txt' % d.strftime(LOG_DATE_FORMAT)
+
+def list_to_csv(l):
+    return ', '.join(map(lambda x: str(x), l))

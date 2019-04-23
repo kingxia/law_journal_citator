@@ -1,7 +1,7 @@
 import lzma, json, os, sqlite3
 
 from lib.constants import *
-from lib.extract import *
+from lib.backend.extract import *
 from lib.journals import *
 from lib.logic import *
 
