@@ -12,7 +12,7 @@ app.controller('homeController', function($http, $scope) {
             var target1 = field1 in item ? item[field1].toLowerCase().includes(lowerQuery) : false;
             var target2 = field2 in item ? item[field2].toLowerCase().includes(lowerQuery) : false;
             return target1 || target2;
-        }
+        };
     };
 
     self.searchJournals = function(query) {
