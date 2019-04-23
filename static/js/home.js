@@ -38,9 +38,9 @@ app.controller('homeController', function($http, $scope) {
         if (self.maxYear) searchOptions['maxYear'] = self.maxYear;
         
         $http.post('/cites', searchOptions).then(function(data) {
-            self.queryResults = data.data;
-        }, function(error) {
-            self.queryError = error;
+            self.searchResults = data.data;
+        }).catch(function(error) {
+            self.searchError = error;
         });
     };
     
