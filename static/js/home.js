@@ -36,4 +36,9 @@ app.controller('homeController', function($http, $scope) {
     $http.get('/journals').then(function(data) {
         self.journals = data.data;
     });
+    
+    const CASELAW_API = 'https://api.case.law/v1/';
+    $http.get(CASELAW_API + 'jurisdictions/').then(function(data) {
+        self.jurisdictions = data.data;
+    });
 });
