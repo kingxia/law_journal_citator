@@ -1,4 +1,4 @@
-from journals import *
+from lib.journals import *
 import re
 
 ## TODO: add ", %s ," around all journal names for citations, to avoid things like Transactions being cited everywhere.

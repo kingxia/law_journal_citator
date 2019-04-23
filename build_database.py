@@ -1,9 +1,9 @@
 import lzma, json, os, sqlite3
 
-from constants import *
-from extract import *
-from journals import *
-from logic import *
+from lib.constants import *
+from lib.extract import *
+from lib.journals import *
+from lib.logic import *
 
 def create_database(dst):
     if os.path.exists(dst):
