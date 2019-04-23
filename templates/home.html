@@ -49,20 +49,40 @@
             </md-autocomplete>
         </div>
         <div layout="row" class="input-row">
+            <md-autocomplete flex
+                  md-no-cache=true
+                  md-selected-item="ctrl.jurisdiction"
+                  md-search-text="ctrl.jurisdictionSearchText"
+                  md-items="jurisdiction in ctrl.searchJurisdictions(ctrl.jurisdictionSearchText)"
+                  md-item-text="jurisdiction.name_long"
+                  md-min-length="0"
+                  placeholder="Select a jurisdiction (optional)"
+                  class="md-block">
+                <md-item-template>
+                    <span>{{ '{{jurisdiction.name_long}}' }}</span>
+                </md-item-template>
+                <md-not-found>
+                    <span>No matching jurisdiction found.</span>
+                </md-not-found>
+            </md-autocomplete>
+        </div>
+        <div layout="row" class="input-row">
             <md-input-container class="md-block compact-md-input" flex style="text-align: left">
                 <label>Year From</label>
                 <input name="year"
                        type="number"
+                       placeholder="(optional)"
                        ng-model="ctrl.minYear">
             </md-input-container>
             <md-input-container class="md-block compact-md-input" flex style="text-align: left">
                 <label>Year To</label>
                 <input name="year"
                        type="number"
+                       placeholder="(optional)"
                        ng-model="ctrl.maxYear">
             </md-input-container>
             <md-button class="md-block md-raised md-primary"
-                ng-click="ctrl.query()" aria-label="Search"
+                ng-click="ctrl.search()" aria-label="Search"
                 ng-disabled="ctrl.journal == undefined">
                 <md-icon md-svg-src="/static/svg/baseline-search-24px.svg"></md-icon>
             </md-button>

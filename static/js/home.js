@@ -6,6 +6,13 @@ app.controller('homeController', function($http, $scope) {
         return journal.name + ' (' + journal.short + ')';
     };
     
+    self.find = function(query, field) {
+        var lowerQuery = angular.lowercase(query);
+        return function(item) {
+            return field in item ? item[field].toLowerCase().includes(lowerQuery) : false;
+        };
+    };
+    
     self.findOr = function(query, field1, field2) {
         var lowerQuery = angular.lowercase(query);
         return function(item) {
@@ -19,7 +26,11 @@ app.controller('homeController', function($http, $scope) {
         return query ? self.journals.filter(self.findOr(query, 'name', 'short')) : self.journals;
     };
     
-    self.query = function() {
+    self.searchJurisdictions = function(query) {
+        return query ? self.jurisdictions.filter(self.find(query, 'name_long')) : self.jurisdictions;
+    };
+    
+    self.search = function() {
         searchOptions = {};
         if (self.journal) searchOptions['journalId'] = [self.journal.id];
         if (self.jurisdiction) searchOptions['jurisdiction'] = [self.jurisdiction.id];
@@ -39,6 +50,6 @@ app.controller('homeController', function($http, $scope) {
     
     const CASELAW_API = 'https://api.case.law/v1/';
     $http.get(CASELAW_API + 'jurisdictions/').then(function(data) {
-        self.jurisdictions = data.data;
+        self.jurisdictions = data.data.results;
     });
 });
