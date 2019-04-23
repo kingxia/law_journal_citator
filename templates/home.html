@@ -25,8 +25,16 @@
 </head>
 <body>
 <div ng-app="home" ng-controller="homeController as ctrl" class="ng-cloak outer-body">
-    <div class="title-segment"><div class="full-flex-row">Journal Citator</div></div>
-    <div class="search-box" style="padding-top: 12px">
+    <div class="title-segment">
+        <div class="full-flex-row">
+            Journal Citator
+            <md-button class="md-icon-button logo" aria-label="Github" target="_blank"
+                ng-href="https://github.com/LeRoi/law_journal_citator" style="height: 1rem">
+                <img class="logo-image" src="/static/png/GitHub-Mark-32px.png">
+            </md-button>
+        </div>
+    </div>
+    <div class="search-box">
         <div layout="row" class="input-row">
             <md-autocomplete flex
                   md-no-cache=true
@@ -66,22 +74,22 @@
                 </md-not-found>
             </md-autocomplete>
         </div>
-        <div layout="row" class="input-row">
-            <md-input-container class="md-block compact-md-input" flex style="text-align: left">
+        <div layout="row" class="input-row year-row">
+            <md-input-container class="md-block compact-md-input year-input" flex>
                 <label>Year From</label>
                 <input name="year"
                        type="number"
                        placeholder="(optional)"
                        ng-model="ctrl.minYear">
             </md-input-container>
-            <md-input-container class="md-block compact-md-input" flex style="text-align: left">
+            <md-input-container class="md-block compact-md-input year-input" flex>
                 <label>Year To</label>
                 <input name="year"
                        type="number"
                        placeholder="(optional)"
                        ng-model="ctrl.maxYear">
             </md-input-container>
-            <md-button class="md-block md-raised md-primary"
+            <md-button class="md-block md-raised md-primary search-button"
                 ng-click="ctrl.search()" aria-label="Search"
                 ng-disabled="ctrl.journal == undefined">
                 <md-icon md-svg-src="/static/svg/baseline-search-24px.svg"></md-icon>

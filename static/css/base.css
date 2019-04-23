@@ -1,46 +1,58 @@
-.toolbar {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 4px;
-    flex-wrap: wrap;
-}
-
-.outer-body {
-    color: black;
-    /*font-size: 22px;*/
-    padding-top: 16px;
-    padding-left: 16px;
-    text-align: center;
-}
-
-.title-segment {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    font-weight: bold;
-    flex-basis: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 36px;
-    padding-bottom: 8px;
-}
-
 .full-flex-row {
+    align-items: flex-end;
+    display: flex;
     flex-basis: 100%;
+    justify-content: center;
     margin-left: auto;
     margin-right: auto;
     padding-top: 8px;
 }
 
-.autocomplete-div {
-    display: flex;
-    flex-wrap: wrap;
+.input-row {
+    flex-basis: 100%;
+    padding-top: 12px;
 }
 
-.autocomplete-label {
+.logo-image {
+    height: 100%;
+    weight: 100%;
+}
+
+.outer-body {
+    color: black;
+    text-align: center;
+}
+
+.search-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+    width: 700px;
+}
+
+.search-button {
+    top: -16px;
+}
+
+.title-segment {
+    display: flex;
     flex-basis: 100%;
-    font-size: 16px;
+    flex-wrap: wrap;
+    font-size: 36px;
+    font-weight: bold;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.year-input {
+    margin: 0;
     text-align: left;
-    margin-bottom: 4px;
+}
+
+.year-row {
+    align-items: center;
+    display: flex;
+    padding-top: 24px;
 }
