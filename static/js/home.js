@@ -49,7 +49,8 @@ app.controller('homeController', function($http, $scope) {
                     'case': arr[2],
                     'jurisdiction': arr[3],
                     'year': arr[4],
-                    'position': arr[5],
+                    'startPos': arr[5],
+                    'endPos': arr[6],
                 };
             });
         }).catch(function(error) {

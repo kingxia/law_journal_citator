@@ -56,7 +56,7 @@ def extract_citations(src, dst, case_count=None):
                     next_id, cite[0], case['id'],
                     case['jurisdiction']['id'],
                     decision_to_year(case['decision_date']),
-                    cite[1]))
+                    cite[1], cite[2]))
                 next_id += 1
 
             current += 1

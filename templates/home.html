@@ -104,13 +104,15 @@
                 <th>Case</th>
                 <th>Jurisdiction</th>
                 <th>Year</th>
-                <th>Position</th>
+                <th>Start</th>
+                <th>End</th>
             </tr>
             <tr ng-repeat="result in ctrl.searchResults">
                 <td>{{'{{result.case}}'}}</td>
                 <td>{{'{{ctrl.jurisdictionIdToName(result.jurisdiction)}}'}}</td>
                 <td>{{'{{result.year}}'}}</td>
-                <td>{{'{{result.position}}'}}</td>
+                <td>{{'{{result.startPos}}'}}</td>
+                <td>{{'{{result.endPos}}'}}</td>
             </tr>
         </table>
     </div>
