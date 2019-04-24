@@ -2,14 +2,14 @@ from lib.journals import *
 import re
 
 PARENS = '(%s)'
-COMMA_NUMBER_SEPARATED = ', \d+ %s \d+'
+NUMBER_SEPARATED = u', \d+ %s \d+[, \u2013]'
 
 ## TODO: add ", %s ," around all journal names for citations, to avoid things like Transactions being cited everywhere.
 ## TODO: check for journal misspellings?
 ## TODO: add check for spacing errors with \s+
 def all_journals_regex():
     return PARENS % (
-        '|'.join(map(lambda x: COMMA_NUMBER_SEPARATED % JOURNALS[x].short.replace('.', '\\.'), range(len(JOURNALS)))))
+        '|'.join(map(lambda x: NUMBER_SEPARATED % JOURNALS[x].short.replace('.', '\\.'), range(len(JOURNALS)))))
 
 def extract_cites(case):
     cites = []
@@ -18,8 +18,8 @@ def extract_cites(case):
         return cites
 
     for i in JOURNALS:
-        j_cites = [m for m in re.finditer(PARENS % (COMMA_NUMBER_SEPARATED % (JOURNALS[i].short)), case['casebody']['data'])]
+        j_cites = [m for m in re.finditer(PARENS % (NUMBER_SEPARATED % (JOURNALS[i].short)), case['casebody']['data'])]
         for cite in j_cites:
-            cites.append([i, cite.start()+2, cite.end()-1])
+            cites.append([i, cite])
 
     return cites

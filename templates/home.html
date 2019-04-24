@@ -103,9 +103,11 @@
             <tr>
                 <th>Case</th>
                 <th>Jurisdiction</th>
-                <th>Year</th>
+                <th>Year Cited</th>
                 <th>Start</th>
                 <th>End</th>
+                <th>Volume</th>
+                <th>Page</th>
             </tr>
             <tr ng-repeat="result in ctrl.searchResults">
                 <td>{{'{{result.case}}'}}</td>
@@ -113,6 +115,8 @@
                 <td>{{'{{result.year}}'}}</td>
                 <td>{{'{{result.startPos}}'}}</td>
                 <td>{{'{{result.endPos}}'}}</td>
+                <td>{{'{{result.volume}}'}}</td>
+                <td>{{'{{result.page}}'}}</td>
             </tr>
         </table>
     </div>

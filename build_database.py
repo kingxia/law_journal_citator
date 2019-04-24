@@ -36,6 +36,10 @@ def get_case_count(f):
 def decision_to_year(s):
     return int(s.split('-')[0])
 
+def cite_to_article(s):
+    parts = s[2:len(s)-1].split(' ')
+    return [parts[0], parts[-1]]
+
 def extract_citations(src, dst, case_count=None):
     current = 0
     cases = {}
@@ -52,11 +56,13 @@ def extract_citations(src, dst, case_count=None):
             cites = extract_cites(case)
 
             for cite in cites:
+                match = cite[1]
+                article = cite_to_article(match.group())
                 cursor.execute(INSERT_CITATION % (
-                    next_id, cite[0], case['id'],
-                    case['jurisdiction']['id'],
+                    next_id, cite[0], int(article[0]), int(article[1]),
+                    case['id'], case['jurisdiction']['id'],
                     decision_to_year(case['decision_date']),
-                    cite[1], cite[2]))
+                    match.start()+2, match.end()-1))
                 next_id += 1
 
             current += 1

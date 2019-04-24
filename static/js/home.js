@@ -46,11 +46,13 @@ app.controller('homeController', function($http, $scope) {
                 return {
                     'id': arr[0],
                     'journal': arr[1],
-                    'case': arr[2],
-                    'jurisdiction': arr[3],
-                    'year': arr[4],
-                    'startPos': arr[5],
-                    'endPos': arr[6],
+                    'volume': arr[2],
+                    'page': arr[3],
+                    'case': arr[4],
+                    'jurisdiction': arr[5],
+                    'year': arr[6],
+                    'startPos': arr[7],
+                    'endPos': arr[8],
                 };
             });
         }).catch(function(error) {

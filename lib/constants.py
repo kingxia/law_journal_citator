@@ -48,6 +48,8 @@ CREATE_CITES_TABLE = '''
 CREATE TABLE citations(
     id INTEGER PRIMARY KEY,
     journalId INTEGER,
+    volume INTEGER,
+    page INTEGER,
     caseId INTEGER,
     jurisdiction INTEGER,
     year INTEGER,
@@ -60,4 +62,4 @@ CREATE TABLE nextIds(
     nextId INTEGER);'''
 
 INSERT_NEXT_ID = 'INSERT INTO nextIds (id, nextId) VALUES (%d, %d);'
-INSERT_CITATION = 'INSERT INTO citations (id, journalId, caseId, jurisdiction, year, startPos, endPos) VALUES (%d, %d, %d, %d, %d, %d, %d);'
+INSERT_CITATION = 'INSERT INTO citations (id, journalId, volume, page, caseId, jurisdiction, year, startPos, endPos) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, %d);'
