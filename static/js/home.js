@@ -6,6 +6,10 @@ app.controller('homeController', function($http, $scope) {
         return journal.name + ' (' + journal.short + ')';
     };
     
+    self.jurisdictionIdToName = function(id) {
+        return self.jurisdictionsById[id].name_long;
+    };
+    
     self.find = function(query, field) {
         var lowerQuery = angular.lowercase(query);
         return function(item) {
@@ -34,11 +38,20 @@ app.controller('homeController', function($http, $scope) {
         searchOptions = {};
         if (self.journal) searchOptions['journalId'] = [self.journal.id];
         if (self.jurisdiction) searchOptions['jurisdiction'] = [self.jurisdiction.id];
-        if (self.minYear) searchOptions['minYear'] = self.minYear;
-        if (self.maxYear) searchOptions['maxYear'] = self.maxYear;
+        if (self.minYear) searchOptions['yearMin'] = self.minYear;
+        if (self.maxYear) searchOptions['yearMax'] = self.maxYear;
         
         $http.post('/cites', searchOptions).then(function(data) {
-            self.searchResults = data.data;
+            self.searchResults = data.data.map(function(arr) {
+                return {
+                    'id': arr[0],
+                    'journal': arr[1],
+                    'case': arr[2],
+                    'jurisdiction': arr[3],
+                    'year': arr[4],
+                    'position': arr[5],
+                };
+            });
         }).catch(function(error) {
             self.searchError = error;
         });
@@ -51,5 +64,9 @@ app.controller('homeController', function($http, $scope) {
     const CASELAW_API = 'https://api.case.law/v1/';
     $http.get(CASELAW_API + 'jurisdictions/').then(function(data) {
         self.jurisdictions = data.data.results;
+        self.jurisdictionsById = {};
+        for(i = 0; i < data.data.results.length; i++) {
+            self.jurisdictionsById[data.data.results[i].id] = data.data.results[i];
+        }
     });
 });

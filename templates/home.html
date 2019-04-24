@@ -99,6 +99,20 @@
     <hr>
     <div ng-if="ctrl.searchResults">
         <span style="font-size: 22px">Total cites: {{'{{ctrl.searchResults.length}}'}}</span>
+        <table style="margin: auto; padding-top: 12px;">
+            <tr>
+                <th>Case</th>
+                <th>Jurisdiction</th>
+                <th>Year</th>
+                <th>Position</th>
+            </tr>
+            <tr ng-repeat="result in ctrl.searchResults">
+                <td>{{'{{result.case}}'}}</td>
+                <td>{{'{{ctrl.jurisdictionIdToName(result.jurisdiction)}}'}}</td>
+                <td>{{'{{result.year}}'}}</td>
+                <td>{{'{{result.position}}'}}</td>
+            </tr>
+        </table>
     </div>
     <div ng-if="ctrl.searchError">
         <span style="font-size: 22px">Something went wrong with your query.</span>
