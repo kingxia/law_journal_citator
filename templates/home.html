@@ -101,38 +101,39 @@
     <hr>
     <div ng-if="ctrl.searchResults">
         <span style="font-size: 22px">Total cites: {{'{{ctrl.searchResults.length}}'}}</span>
+        <div class="citation-table">
+            <md-table-container>
+                <table md-table>
+                    <thead md-head md-order="ctrl.tableOptions.orderBy" md-on-reorder="ctrl.updateSearchResults()">
+                        <tr md-row>
+                            <th md-column md-order-by='cite'><span>Cite</span></th>
+                            <th md-column md-order-by='case'><span>Case</span></th>
+                            <th md-column md-order-by='jurisdiction'>Jurisdiction</th>
+                            <th md-column md-numeric md-order-by="year">Year</th>
+                            <th md-column>Position</th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="citation" md-auto-select ng-repeat="citation in ctrl.lastestSearchResults">
+                            <td md-cell>{{'{{ctrl.generateCite(citation)}}'}}</td>
+                            <td md-cell>{{'{{citation.case}}'}}</td>
+                            <td md-cell>{{'{{ctrl.jurisdictionIdToName(citation.jurisdiction)}}'}}</td>
+                            <td md-cell>{{'{{citation.year}}'}}</td>
+                            <td md-cell>
+                                <div>[{{'{{citation.startPos}}'}},</div><div> {{'{{citation.endPos}}'}}]</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
 
-        <md-table-container>
-            <table md-table>
-                <thead md-head md-order="ctrl.tableOptions.orderBy" md-on-reorder="ctrl.updateSearchResults()">
-                    <tr md-row>
-                        <th md-column md-order-by='cite'><span>Cite</span></th>
-                        <th md-column md-order-by='case'><span>Case</span></th>
-                        <th md-column md-order-by='jurisdiction'>Jurisdiction</th>
-                        <th md-column md-numeric md-order-by="year">Year</th>
-                        <th md-column>Position</th>
-                    </tr>
-                </thead>
-                <tbody md-body>
-                    <tr md-row md-select="citation" md-auto-select ng-repeat="citation in ctrl.lastestSearchResults">
-                        <td md-cell>{{'{{ctrl.generateCite(citation)}}'}}</td>
-                        <td md-cell>{{'{{citation.case}}'}}</td>
-                        <td md-cell>{{'{{ctrl.jurisdictionIdToName(citation.jurisdiction)}}'}}</td>
-                        <td md-cell>{{'{{citation.year}}'}}</td>
-                        <td md-cell>
-                            <div>[{{'{{citation.startPos}}'}},</div><div> {{'{{citation.endPos}}'}}]</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </md-table-container>
-
-        <md-table-pagination md-limit="ctrl.tableOptions.rowsPerPage"
-            md-limit-options="ctrl.tableOptions.rowOptions"
-            md-page="ctrl.tableOptions.page"
-            md-total="{{'{{ctrl.searchResults.length}}'}}" md-page-select
-            md-on-paginate="ctrl.updateSearchResults()">
-        </md-table-pagination>
+            <md-table-pagination md-limit="ctrl.tableOptions.rowsPerPage"
+                md-limit-options="ctrl.tableOptions.rowOptions"
+                md-page="ctrl.tableOptions.page"
+                md-total="{{'{{ctrl.searchResults.length}}'}}" md-page-select
+                md-on-paginate="ctrl.updateSearchResults()">
+            </md-table-pagination>
+        </div>
     </div>
     <div ng-if="ctrl.searchError">
         <span style="font-size: 22px">Something went wrong with your query.</span>
