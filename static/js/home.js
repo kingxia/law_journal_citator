@@ -6,6 +6,10 @@ app.controller('homeController', function($http, $scope) {
         return journal.name + ' (' + journal.short + ')';
     };
     
+    self.generateCite = function(r) {
+        return r.volume + ' ' + self.journalsById[r.journal].short + ' ' + r.page;
+    };
+    
     self.jurisdictionIdToName = function(id) {
         return self.jurisdictionsById[id].name_long;
     };
@@ -62,6 +66,10 @@ app.controller('homeController', function($http, $scope) {
     
     $http.get('/journals').then(function(data) {
         self.journals = data.data;
+        self.journalsById = {};
+        for(i = 0; i < data.data.length; i++) {
+            self.journalsById[data.data[i].id] = data.data[i];
+        }
     });
     
     const CASELAW_API = 'https://api.case.law/v1/';

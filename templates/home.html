@@ -94,29 +94,25 @@
                 ng-disabled="ctrl.journal == undefined">
                 <md-icon md-svg-src="/static/svg/baseline-search-24px.svg"></md-icon>
             </md-button>
-       </div>
+        </div>
     </div>
     <hr>
     <div ng-if="ctrl.searchResults">
         <span style="font-size: 22px">Total cites: {{'{{ctrl.searchResults.length}}'}}</span>
         <table style="margin: auto; padding-top: 12px;">
             <tr>
+                <th>Cite</th>
                 <th>Case</th>
                 <th>Jurisdiction</th>
-                <th>Year Cited</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Volume</th>
-                <th>Page</th>
+                <th>Year</th>
+                <th>Position</th>
             </tr>
             <tr ng-repeat="result in ctrl.searchResults">
+                <td>{{'{{ctrl.generateCite(result)}}'}}</td>
                 <td>{{'{{result.case}}'}}</td>
                 <td>{{'{{ctrl.jurisdictionIdToName(result.jurisdiction)}}'}}</td>
                 <td>{{'{{result.year}}'}}</td>
-                <td>{{'{{result.startPos}}'}}</td>
-                <td>{{'{{result.endPos}}'}}</td>
-                <td>{{'{{result.volume}}'}}</td>
-                <td>{{'{{result.page}}'}}</td>
+                <td style="display: flex; justify-content: space-between; padding-left: 8px; padding-right: 8px;"><div>[{{'{{result.startPos}}'}},</div><div> {{'{{result.endPos}}'}}]</div></td>
             </tr>
         </table>
     </div>
