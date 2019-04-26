@@ -60,7 +60,8 @@ def extract_citations(src, dst, case_count=None):
                 article = cite_to_article(match.group())
                 cursor.execute(INSERT_CITATION % (
                     next_id, cite[0], int(article[0]), int(article[1]),
-                    case['id'], case['jurisdiction']['id'],
+                    case['id'], case['name'],
+                    case['jurisdiction']['id'],
                     decision_to_year(case['decision_date']),
                     match.start()+2, match.end()-1))
                 next_id += 1

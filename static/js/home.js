@@ -44,11 +44,11 @@ app.controller('homeController', function($http, $scope) {
     
     self.tableSorts = {
         'cite': self.fieldSort(self.generateCiteFunction()),
-        'case': self.fieldSort('case'),
+        'case': self.fieldSort('caseName'),
         'jurisdiction': self.fieldSort(self.generateJurisdictionFunction()),
         'year': self.fieldSort('year'),
         '-cite': self.fieldSort(self.generateCiteFunction(), false),
-        '-case': self.fieldSort('case', false),
+        '-case': self.fieldSort('caseName', false),
         '-jurisdiction': self.fieldSort(self.generateJurisdictionFunction(), false),
         '-year': self.fieldSort('year', false),
     };
@@ -111,11 +111,12 @@ app.controller('homeController', function($http, $scope) {
                     'journal': arr[1],
                     'volume': arr[2],
                     'page': arr[3],
-                    'case': arr[4],
-                    'jurisdiction': arr[5],
-                    'year': arr[6],
-                    'startPos': arr[7],
-                    'endPos': arr[8],
+                    'caseId': arr[4],
+                    'caseName': arr[5],
+                    'jurisdiction': arr[6],
+                    'year': arr[7],
+                    'startPos': arr[8],
+                    'endPos': arr[9],
                 };
             });
             self.lastestSearchResults = self.searchResults;

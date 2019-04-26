@@ -114,7 +114,9 @@
                     <tbody md-body>
                         <tr md-row md-select="citation" md-auto-select ng-repeat="citation in ctrl.lastestSearchResults">
                             <td md-cell>{{'{{ctrl.generateCite(citation)}}'}}</td>
-                            <td md-cell>{{'{{citation.case}}'}}</td>
+                            <td md-cell>
+                                <a href="{{'{{\'https://api.case.law/v1/cases/\' + citation.caseId}}'}}" target="_blank">{{'{{citation.caseName}}'}}</a>
+                            </td>
                             <td md-cell>{{'{{ctrl.jurisdictionIdToName(citation.jurisdiction)}}'}}</td>
                             <td md-cell>{{'{{citation.year}}'}}</td>
                             <td md-cell>
