@@ -75,6 +75,18 @@
                     <span>No matching jurisdiction found.</span>
                 </md-not-found>
             </md-autocomplete>
+            <md-input-container class="md-block compact-md-input number-input" flex>
+                <label>Volume</label>
+                <input name="volume"
+                       type="number"
+                       ng-model="ctrl.volume">
+            </md-input-container>
+            <md-input-container class="md-block compact-md-input number-input" flex>
+                <label>Page</label>
+                <input name="page"
+                       type="number"
+                       ng-model="ctrl.page">
+            </md-input-container>
         </div>
         <div layout="row" class="input-row year-row">
             <md-input-container class="md-block compact-md-input year-input" flex>

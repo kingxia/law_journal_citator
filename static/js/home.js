@@ -123,6 +123,8 @@ app.controller('homeController', function($http, $scope) {
         searchOptions = {};
         if (self.journal) searchOptions['journalId'] = [self.journal.id];
         if (self.jurisdiction) searchOptions['jurisdiction'] = [self.jurisdiction.id];
+        if (self.volume) searchOptions['volume'] = [self.volume];
+        if (self.page) searchOptions['page'] = [self.page];
         if (self.minYear) searchOptions['yearMin'] = self.minYear;
         if (self.maxYear) searchOptions['yearMax'] = self.maxYear;
         if (self.groupBy) searchOptions['groupBy'] = self.groupBy;

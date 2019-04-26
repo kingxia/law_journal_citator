@@ -1,7 +1,7 @@
 import sqlite3
 from lib.logic import list_to_csv
 
-REQUEST_KEYWORDS = ['journalId', 'jurisdiction']
+REQUEST_KEYWORDS = ['journalId', 'jurisdiction', 'volume', 'page']
 OPTION_KEYWORDS = ['yearMin', 'yearMax', 'groupBy']
 GROUP_BY_TRANSLATE = {
     'case': 'caseId',

@@ -28,6 +28,11 @@
     weight: 100%;
 }
 
+.number-input {
+    margin: 8 0 0 4;
+    text-align: left;
+}
+
 .outer-body {
     color: black;
     text-align: center;
@@ -64,5 +69,5 @@
 .year-row {
     align-items: center;
     display: flex;
-    padding-top: 24px;
+    margin-top: -16px;
 }
