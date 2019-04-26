@@ -1,6 +1,58 @@
-var app = angular.module('home', ['ngMaterial', 'ngMessages']);
+var app = angular.module('home', ['ngMaterial', 'ngMessages', 'md.data.table', 'ngRoute']);
 app.controller('homeController', function($http, $scope) {
 	var self = this;
+    
+    self.tableSelected = [];
+    self.tableOptions = {
+        'rowsPerPage': 10,
+        'rowOptions': [10, 20, 50, 100],
+        'page': 1,
+        'orderBy': 'year',
+    };
+    
+    self.fieldSort = function(s, sortAsc=true) {
+        return function(left, right) {
+            lElement = sortAsc ? left : right;
+            rElement = sortAsc ? right : left;
+            
+            lValue = typeof s === 'function' ? s(lElement) : lElement[s];
+            rValue = typeof s === 'function' ? s(rElement) : rElement[s];
+            
+            if (typeof lValue === 'string') return lValue.localeCompare(rValue);
+            return lValue - rValue;
+        };
+    };
+    
+    self.generateJurisdictionFunction = function() {
+        return function(r) {
+            return self.jurisdictionIdToName(r.jurisdiction);
+        };
+    };
+    
+    self.generateCiteFunction = function() {
+        return function(r) {
+            return self.generateCite(r);
+        };
+    };
+    
+    self.tableSorts = {
+        'cite': self.fieldSort(self.generateCiteFunction()),
+        'case': self.fieldSort('case'),
+        'jurisdiction': self.fieldSort(self.generateJurisdictionFunction()),
+        'year': self.fieldSort('year'),
+        '-cite': self.fieldSort(self.generateCiteFunction(), false),
+        '-case': self.fieldSort('case', false),
+        '-jurisdiction': self.fieldSort(self.generateJurisdictionFunction(), false),
+        '-year': self.fieldSort('year', false),
+    };
+    
+    self.updateSearchResults = function() {
+        self.lastestSearchResults = Array.from(self.searchResults);
+        self.lastestSearchResults.sort(self.tableSorts[self.tableOptions.orderBy]);
+        self.lastestSearchResults = self.lastestSearchResults.slice(
+            self.tableOptions.rowsPerPage * (self.tableOptions.page - 1),
+            self.tableOptions.rowsPerPage * self.tableOptions.page);
+    };
     
     self.displayJournal = function(journal) {
         return journal.name + ' (' + journal.short + ')';
@@ -59,6 +111,7 @@ app.controller('homeController', function($http, $scope) {
                     'endPos': arr[8],
                 };
             });
+            self.lastestSearchResults = self.searchResults;
         }).catch(function(error) {
             self.searchError = error;
         });
