@@ -13,6 +13,11 @@
     padding-top: 8px;
 }
 
+.group-by {
+    margin-left: 8px;
+    top: -16px;
+}
+
 .input-row {
     flex-basis: 100%;
     padding-top: 12px;

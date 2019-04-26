@@ -89,6 +89,22 @@
                        type="number"
                        ng-model="ctrl.maxYear">
             </md-input-container>
+            <md-autocomplete flex
+                  md-no-cache=true
+                  md-selected-item="ctrl.groupBy"
+                  md-search-text="ctrl.groupSearchText"
+                  md-items="group in ctrl.searchGroups(ctrl.groupSearchText)"
+                  md-item-text="ctrl.toProperCase(group)"
+                  md-min-length="0"
+                  placeholder="Group by"
+                  class="md-block group-by">
+                <md-item-template>
+                    <span>{{ '{{ctrl.toProperCase(group)}}' }}</span>
+                </md-item-template>
+                <md-not-found>
+                    <span>No matching group found.</span>
+                </md-not-found>
+            </md-autocomplete>
             <md-button class="md-block md-raised md-primary search-button"
                 ng-click="ctrl.search()" aria-label="Search"
                 ng-disabled="!ctrl.canSearch()">
@@ -104,23 +120,69 @@
                 <table md-table>
                     <thead md-head md-order="ctrl.tableOptions.orderBy" md-on-reorder="ctrl.updateSearchResults()">
                         <tr md-row>
-                            <th md-column md-order-by='cite'><span>Cite</span></th>
-                            <th md-column md-order-by='case'><span>Case</span></th>
-                            <th md-column md-order-by='jurisdiction'>Jurisdiction</th>
-                            <th md-column md-numeric md-order-by="year">Year</th>
-                            <th md-column>Position</th>
+                            <th md-column md-order-by='cite' ng-if="ctrl.showColumn('cite')">
+                                Cite
+                            </th>
+                            <th md-column md-order-by='case' ng-if="ctrl.showColumn('case')">
+                                Case
+                            </th>
+                            <th md-column md-order-by='jurisdiction' ng-if="ctrl.showColumn('jurisdiction')">
+                                Jurisdiction
+                            </th>
+                            <th md-column md-numeric md-order-by="year" ng-if="ctrl.showColumn('year')">
+                                Year
+                            </th>
+                            <th md-column ng-if="ctrl.showColumn('position')">
+                                Position
+                            </th>
+                            <th md-column md-order-by='citeCount' ng-if="ctrl.showColumn('citeCount')">
+                                # Cites
+                            </th>
+                            <th md-column md-order-by='journalCount' ng-if="ctrl.showColumn('journalCount')">
+                                # Journals
+                            </th>
+                            <th md-column md-order-by='jurisdictionCount' ng-if="ctrl.showColumn('jurisdictionCount')">
+                                # Jurisdictions
+                            </th>
+                            <th md-column md-order-by='caseCount' ng-if="ctrl.showColumn('caseCount')">
+                                # Cases
+                            </th>
+                            <th md-column md-order-by='yearCount' ng-if="ctrl.showColumn('yearCount')">
+                                # Years
+                            </th>
                         </tr>
                     </thead>
                     <tbody md-body>
                         <tr md-row md-select="citation" md-auto-select ng-repeat="citation in ctrl.lastestSearchResults">
-                            <td md-cell>{{'{{ctrl.generateCite(citation)}}'}}</td>
-                            <td md-cell>
+                            <td md-cell ng-if="ctrl.showColumn('cite')">
+                                {{'{{ctrl.generateCite(citation)}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('case')">
                                 <a href="{{'{{\'https://api.case.law/v1/cases/\' + citation.caseId}}'}}" target="_blank">{{'{{citation.caseName}}'}}</a>
                             </td>
-                            <td md-cell>{{'{{ctrl.jurisdictionIdToName(citation.jurisdiction)}}'}}</td>
-                            <td md-cell>{{'{{citation.year}}'}}</td>
-                            <td md-cell>
+                            <td md-cell ng-if="ctrl.showColumn('jurisdiction')">
+                                {{'{{ctrl.jurisdictionIdToName(citation.jurisdiction)}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('year')">
+                                {{'{{citation.year}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('position')">
                                 <div>[{{'{{citation.startPos}}'}},</div><div> {{'{{citation.endPos}}'}}]</div>
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('citeCount')">
+                                {{'{{citation.citeCount}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('journalCount')">
+                                {{'{{citation.journalCount}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('jurisdictionCount')">
+                                {{'{{citation.jurisdictionCount}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('caseCount')">
+                                {{'{{citation.caseCount}}'}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('yearCount')">
+                                {{'{{citation.yearCount}}'}}
                             </td>
                         </tr>
                     </tbody>

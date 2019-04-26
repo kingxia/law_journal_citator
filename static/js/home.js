@@ -14,7 +14,6 @@ app.controller('homeController', function($http, $scope) {
         'rowsPerPage': 10,
         'rowOptions': [10, 20, 50, 100],
         'page': 1,
-        'orderBy': 'year',
     };
     
     self.fieldSort = function(s, sortAsc=true) {
@@ -47,10 +46,20 @@ app.controller('homeController', function($http, $scope) {
         'case': self.fieldSort('caseName'),
         'jurisdiction': self.fieldSort(self.generateJurisdictionFunction()),
         'year': self.fieldSort('year'),
+        'citeCount': self.fieldSort('citeCount'),
+        'caseCount': self.fieldSort('caseCount'),
+        'jurisdictionCount': self.fieldSort('jurisdictionCount'),
+        'journalCount': self.fieldSort('journalCount'),
+        'yearCount': self.fieldSort('yearCount'),
         '-cite': self.fieldSort(self.generateCiteFunction(), false),
         '-case': self.fieldSort('caseName', false),
         '-jurisdiction': self.fieldSort(self.generateJurisdictionFunction(), false),
         '-year': self.fieldSort('year', false),
+        '-citeCount': self.fieldSort('citeCount', false),
+        '-caseCount': self.fieldSort('caseCount', false),
+        '-jurisdictionCount': self.fieldSort('jurisdictionCount', false),
+        '-journalCount': self.fieldSort('journalCount', false),
+        '-yearCount': self.fieldSort('yearCount', false),
     };
     
     self.updateSearchResults = function() {
@@ -97,28 +106,33 @@ app.controller('homeController', function($http, $scope) {
         return query ? self.jurisdictions.filter(self.find(query, 'name_long')) : self.jurisdictions;
     };
     
+    self.searchGroups = function(query) {
+        return query ? self.groupOptions.filter(function(s) {
+            return s.includes(angular.lowercase(query));
+        }) : self.groupOptions;
+    };
+    
+    self.groupBy = null;
+    self.groupOptions = ['case', 'cite', 'jurisdiction', 'year'];
+    self.toProperCase = function(s) {
+        if (s === undefined) return '';
+        return s.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+    
     self.search = function() {
         searchOptions = {};
         if (self.journal) searchOptions['journalId'] = [self.journal.id];
         if (self.jurisdiction) searchOptions['jurisdiction'] = [self.jurisdiction.id];
         if (self.minYear) searchOptions['yearMin'] = self.minYear;
         if (self.maxYear) searchOptions['yearMax'] = self.maxYear;
+        if (self.groupBy) searchOptions['groupBy'] = self.groupBy;
+        self.searchGroupBy = self.groupBy;
+        delete self.searchResults;
+        delete self.latestSearchResults;
+        delete self.searchError;
         
         $http.post('/cites', searchOptions).then(function(data) {
-            self.searchResults = data.data.map(function(arr) {
-                return {
-                    'id': arr[0],
-                    'journal': arr[1],
-                    'volume': arr[2],
-                    'page': arr[3],
-                    'caseId': arr[4],
-                    'caseName': arr[5],
-                    'jurisdiction': arr[6],
-                    'year': arr[7],
-                    'startPos': arr[8],
-                    'endPos': arr[9],
-                };
-            });
+            self.searchResults = data.data.map(self.resultMapper[self.searchGroupBy]);
             self.lastestSearchResults = self.searchResults;
         }).catch(function(error) {
             self.searchError = error;
@@ -141,4 +155,95 @@ app.controller('homeController', function($http, $scope) {
             self.jurisdictionsById[data.data.results[i].id] = data.data.results[i];
         }
     });
+    
+    self.noGroupBy = function(arr) {
+        return {
+            'id': arr[0],
+            'journal': arr[1],
+            'volume': arr[2],
+            'page': arr[3],
+            'caseId': arr[4],
+            'caseName': arr[5],
+            'jurisdiction': arr[6],
+            'year': arr[7],
+            'startPos': arr[8],
+            'endPos': arr[9],
+        };
+    };
+    
+    self.groupByCase = function(arr) {
+        return {
+            'caseId': arr[0],
+            'caseName': arr[1],
+            'jurisdiction': arr[2],
+            'year': arr[3],
+            'citeCount': arr[4],
+            'journalCount': arr[5],
+        };
+    };
+    
+    self.groupByCite = function(arr) {
+        return {
+            'volume': arr[0],
+            'page': arr[1],
+            'journal': arr[2],
+            'citeCount': arr[3],
+            'caseCount': arr[4],
+            'jurisdictionCount': arr[5],
+            'yearCount': arr[6],
+        };
+    };
+    
+    self.groupByJurisdiction = function(arr) {
+        return {
+            'jurisdiction': arr[0],
+            'citeCount': arr[1],
+            'journalCount': arr[2],
+            'caseCount': arr[3],
+            'yearCount': arr[4],
+        };
+    };
+    
+    self.groupByYear = function(arr) {
+        return {
+            'year': arr[0],
+            'citeCount': arr[1],
+            'journalCount': arr[2],
+            'caseCount': arr[3],
+            'jurisdictionCount': arr[4],
+        };
+    };
+    
+    self.resultMapper = {
+        null: self.noGroupBy,
+        'case': self.groupByCase,
+        'cite': self.groupByCite,
+        'jurisdiction': self.groupByJurisdiction,
+        'year': self.groupByYear,
+    };
+    
+    self.showColumn = function(s) {
+        switch(s) {
+            case 'cite':
+                return self.searchGroupBy == null || self.searchGroupBy == 'cite';
+            case 'case':
+                return self.searchGroupBy == null || self.searchGroupBy == 'case';
+            case 'jurisdiction':
+                return self.searchGroupBy == null || self.searchGroupBy == 'case' || self.searchGroupBy == 'jurisdiction';
+            case 'year':
+                return self.searchGroupBy == null || self.searchGroupBy == 'case' || self.searchGroupBy == 'year';
+            case 'position':
+                return self.searchGroupBy == null;
+            case 'citeCount':
+                return self.searchGroupBy != null;
+            case 'journalCount':
+                return self.searchGroupBy == 'jurisdiction' || self.searchGroupBy == 'case' || self.searchGroupBy == 'year';
+            case 'caseCount':
+                return self.searchGroupBy == 'jurisdiction' || self.searchGroupBy == 'cite' || self.searchGroupBy == 'year';
+            case 'jurisdictionCount':
+                return self.searchGroupBy == 'year' || self.searchGroupBy == 'cite';
+            case 'yearCount':
+                return self.searchGroupBy == 'jurisdiction' || self.searchGroupBy == 'cite';
+        }
+    };
 });

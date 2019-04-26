@@ -2,7 +2,19 @@ import sqlite3
 from lib.logic import list_to_csv
 
 REQUEST_KEYWORDS = ['journalId', 'jurisdiction']
-YEAR_KEYWORDS = ['yearMin', 'yearMax']
+OPTION_KEYWORDS = ['yearMin', 'yearMax', 'groupBy']
+GROUP_BY_TRANSLATE = {
+    'case': 'caseId',
+    'cite': 'volume, page, journalId',
+    'jurisdiction': 'jurisdiction',
+    'year': 'year'
+}
+SELECT_TRANSLATE = {
+    'case': 'caseId, caseName, jurisdiction, year, count(id), count(distinct journalId)',
+    'cite': 'volume, page, journalId, count(id), count(distinct caseId), count(distinct jurisdiction), count(distinct year)',
+    'jurisdiction': 'jurisdiction, count(id), count(distinct journalId), count(distinct caseId), count(distinct year)',
+    'year': 'year, count(id), count(distinct journalId), count(distinct caseId), count(distinct jurisdiction)'
+}
 
 def build_options(request):
     options = {}
@@ -11,17 +23,22 @@ def build_options(request):
         if kw in request:
             options[kw] = request[kw]
 
-    for kw in YEAR_KEYWORDS:
+    for kw in OPTION_KEYWORDS:
         if kw in request:
             options[kw] = request[kw]
 
     return options
 
+def get_select(options):
+    if 'groupBy' not in options:
+        return '*'
+    return SELECT_TRANSLATE[options['groupBy']]
+        
 def get_cites(dst, options={}):
     db = sqlite3.connect(dst)
     cursor = db.cursor()
 
-    query = 'SELECT * FROM citations'
+    query = 'SELECT %s FROM citations' % (get_select(options))
     query += ' WHERE ' if len(options) > 0 else ''
 
     where_query = map(lambda x: '%s IN (%s)' % (x, list_to_csv(options[x])),
@@ -32,6 +49,9 @@ def get_cites(dst, options={}):
         where_query.append('year <= %d' % options['yearMax'])
 
     query += ' and '.join(where_query)
+    if 'groupBy' in options:
+        query += ' GROUP BY %s' % (GROUP_BY_TRANSLATE[options['groupBy']])
+        
     query += ';'
 
     cursor.execute(query)
