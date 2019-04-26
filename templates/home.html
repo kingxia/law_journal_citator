@@ -66,7 +66,7 @@
                   md-items="jurisdiction in ctrl.searchJurisdictions(ctrl.jurisdictionSearchText)"
                   md-item-text="jurisdiction.name_long"
                   md-min-length="0"
-                  placeholder="Select a jurisdiction (optional)"
+                  placeholder="Select a jurisdiction"
                   class="md-block">
                 <md-item-template>
                     <span>{{ '{{jurisdiction.name_long}}' }}</span>
@@ -81,19 +81,17 @@
                 <label>Year From</label>
                 <input name="year"
                        type="number"
-                       placeholder="(optional)"
                        ng-model="ctrl.minYear">
             </md-input-container>
             <md-input-container class="md-block compact-md-input year-input" flex>
                 <label>Year To</label>
                 <input name="year"
                        type="number"
-                       placeholder="(optional)"
                        ng-model="ctrl.maxYear">
             </md-input-container>
             <md-button class="md-block md-raised md-primary search-button"
                 ng-click="ctrl.search()" aria-label="Search"
-                ng-disabled="ctrl.journal == undefined">
+                ng-disabled="!ctrl.canSearch()">
                 <md-icon md-svg-src="/static/svg/baseline-search-24px.svg"></md-icon>
             </md-button>
         </div>

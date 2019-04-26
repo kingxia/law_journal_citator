@@ -2,6 +2,13 @@ var app = angular.module('home', ['ngMaterial', 'ngMessages', 'md.data.table', '
 app.controller('homeController', function($http, $scope) {
 	var self = this;
     
+    self.canSearch = function() {
+        return self.journal != undefined ||
+            self.jurisdiction != undefined ||
+            (self.minYear != undefined && self.minYear > 0) ||
+            (self.maxYear != undefined && self.maxYear > 0);
+    };
+    
     self.tableSelected = [];
     self.tableOptions = {
         'rowsPerPage': 10,
