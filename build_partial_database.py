@@ -79,9 +79,6 @@ def extract_citations(src, dst, case_count=None):
 
 def main(verbose=False):
     folders = get_all_bulk_data_folders()
-    folders = folders[5:]
-    #print(folders[0])
-    folders = ['United States-20190418-xml']
     journal_citations = {}
     for folder in folders:
         partial_db = '%s%s%s.db' % (PARTIALS_PATH, 'citations-', folder)
