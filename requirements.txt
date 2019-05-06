@@ -1,0 +1,5 @@
+Flask>=0.12.2
+gunicorn>=19.2.1
+Jinja2>=2.10
+requests>=2.19.1
+Werkzeug>=0.14.1
