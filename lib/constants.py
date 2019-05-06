@@ -10,7 +10,8 @@ COURSE_TIME_STORAGE_DELIMITER = '-'
 LOG_PATH = 'data/logs/'
 LOG_DATE_FORMAT = '%Y-%m-%d_log'
 
-DATABASE_PATH = 'data/citations.db'
+DATABASE_PATH = 'data/all-citations.db'
+PARTIALS_PATH = 'data/partial_dbs/'
 
 class Logger():
     def __init__(self):

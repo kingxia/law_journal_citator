@@ -60,14 +60,14 @@ def extract_citations(src, dst, case_count=None):
                 article = cite_to_article(match.group())
                 cursor.execute(INSERT_CITATION % (
                     next_id, cite[0], int(article[0]), int(article[1]),
-                    case['id'], case['name'],
+                    case['id'], case['name'].replace('"', '""'),
                     case['jurisdiction']['id'],
                     decision_to_year(case['decision_date']),
                     match.start()+2, match.end()-1))
                 next_id += 1
 
-            current += 1
             if case_count:
+                current += 1
                 progress = (current * 100) / case_count
                 last_progress = ((current - 1) * 100) / case_count
                 if round(progress) > round(last_progress) and round(progress) % 5 == 0:
@@ -77,15 +77,21 @@ def extract_citations(src, dst, case_count=None):
     db.commit()
     db.close()
 
-def main():
-    create_database(DATABASE_PATH)
+def main(verbose=False):
     folders = get_all_bulk_data_folders()
+    folders = folders[5:]
+    #print(folders[0])
+    folders = ['United States-20190418-xml']
     journal_citations = {}
     for folder in folders:
+        partial_db = '%s%s%s.db' % (PARTIALS_PATH, 'citations-', folder)
+        create_database(partial_db)
         log('Extracting cases from %s.' % folder, to_console=True)
-        case_count = get_case_count(folder_to_xz_path(folder))
-        log('\tParsing %d cases.' % case_count, to_console=True)
-        extract_citations(folder_to_xz_path(folder), DATABASE_PATH, case_count=case_count)
+        case_count = None
+        if verbose:
+            case_count = get_case_count(folder_to_xz_path(folder))
+            log('\tParsing %d cases.' % case_count, to_console=True)
+        extract_citations(folder_to_xz_path(folder), partial_db, case_count=case_count)
 
 if __name__ == '__main__':
-    main()
+    main(verbose=True)
