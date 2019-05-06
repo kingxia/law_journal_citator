@@ -13,7 +13,7 @@ debug = True
 
 journal_data = [JOURNALS[j].__dict__ for j in JOURNALS]
 
-@app.route('/journals')
+@app.route('/journals/')
 def static_journals():
     return json.dumps(journal_data)
 
