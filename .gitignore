@@ -5,3 +5,5 @@ data/logs/
 data/partial_dbs/
 scripts/data/
 scripts/output/
+
+build/
