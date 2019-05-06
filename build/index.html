@@ -1,0 +1,216 @@
+<title>Journal Citator</title>
+<head>
+    <!-- site specific -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/md-data-table.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Angular Material -->
+
+    <!-- Material -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-messages.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular-route.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+
+    <script src="/static/js/home.js"></script>
+    <script src="/static/js/md-data-table.js"></script>
+</head>
+<body>
+<div ng-app="home" ng-controller="homeController as ctrl" class="ng-cloak outer-body">
+    <div class="title-segment">
+        <div class="full-flex-row">
+            Journal Citator
+            <md-button class="md-icon-button logo" aria-label="Github" target="_blank"
+                ng-href="https://github.com/LeRoi/law_journal_citator" style="height: 1rem">
+                <img class="logo-image" src="/static/png/GitHub-Mark-32px.png">
+            </md-button>
+        </div>
+    </div>
+    <div class="search-box">
+        <div layout="row" class="input-row">
+            <md-autocomplete flex
+                  md-no-cache=true
+                  md-selected-item="ctrl.journal"
+                  md-search-text="ctrl.journalSearchText"
+                  md-items="journal in ctrl.searchJournals(ctrl.journalSearchText)"
+                  md-item-text="ctrl.displayJournal(journal)"
+                  md-min-length="0"
+                  placeholder="Select a journal"
+                  class="md-block">
+                <md-item-template>
+                    <span>{{journal.name}}</span>
+                    <span style="font-size: 12px">
+                        ({{journal.short}})
+                    </span>
+                </md-item-template>
+                <md-not-found>
+                    <span>No matching journals found.</span>
+                </md-not-found>
+            </md-autocomplete>
+        </div>
+        <div layout="row" class="input-row">
+            <md-autocomplete flex
+                  md-no-cache=true
+                  md-selected-item="ctrl.jurisdiction"
+                  md-search-text="ctrl.jurisdictionSearchText"
+                  md-items="jurisdiction in ctrl.searchJurisdictions(ctrl.jurisdictionSearchText)"
+                  md-item-text="jurisdiction.name_long"
+                  md-min-length="0"
+                  placeholder="Select a jurisdiction"
+                  class="md-block">
+                <md-item-template>
+                    <span>{{jurisdiction.name_long}}</span>
+                </md-item-template>
+                <md-not-found>
+                    <span>No matching jurisdiction found.</span>
+                </md-not-found>
+            </md-autocomplete>
+            <md-input-container class="md-block compact-md-input number-input" flex>
+                <label>Volume</label>
+                <input name="volume"
+                       type="number"
+                       ng-model="ctrl.volume">
+            </md-input-container>
+            <md-input-container class="md-block compact-md-input number-input" flex>
+                <label>Page</label>
+                <input name="page"
+                       type="number"
+                       ng-model="ctrl.page">
+            </md-input-container>
+        </div>
+        <div layout="row" class="input-row year-row">
+            <md-input-container class="md-block compact-md-input year-input" flex>
+                <label>Year From</label>
+                <input name="year"
+                       type="number"
+                       ng-model="ctrl.minYear">
+            </md-input-container>
+            <md-input-container class="md-block compact-md-input year-input" flex>
+                <label>Year To</label>
+                <input name="year"
+                       type="number"
+                       ng-model="ctrl.maxYear">
+            </md-input-container>
+            <md-autocomplete flex
+                  md-no-cache=true
+                  md-selected-item="ctrl.groupBy"
+                  md-search-text="ctrl.groupSearchText"
+                  md-items="group in ctrl.searchGroups(ctrl.groupSearchText)"
+                  md-item-text="ctrl.toProperCase(group)"
+                  md-min-length="0"
+                  placeholder="Group by"
+                  class="md-block group-by">
+                <md-item-template>
+                    <span>{{ctrl.toProperCase(group)}}</span>
+                </md-item-template>
+                <md-not-found>
+                    <span>No matching group found.</span>
+                </md-not-found>
+            </md-autocomplete>
+            <md-button class="md-block md-raised md-primary search-button"
+                ng-click="ctrl.search()" aria-label="Search"
+                ng-disabled="!ctrl.canSearch()">
+                <md-icon md-svg-src="/static/svg/baseline-search-24px.svg"></md-icon>
+            </md-button>
+        </div>
+    </div>
+    <hr>
+    <div ng-if="ctrl.searchResults">
+        <span style="font-size: 22px">Total cites: {{ctrl.searchResults.length}}</span>
+        <div class="citation-table">
+            <md-table-container>
+                <table md-table>
+                    <thead md-head md-order="ctrl.tableOptions.orderBy" md-on-reorder="ctrl.updateSearchResults()">
+                        <tr md-row>
+                            <th md-column md-order-by='cite' ng-if="ctrl.showColumn('cite')">
+                                Cite
+                            </th>
+                            <th md-column md-order-by='case' ng-if="ctrl.showColumn('case')">
+                                Case
+                            </th>
+                            <th md-column md-order-by='jurisdiction' ng-if="ctrl.showColumn('jurisdiction')">
+                                Jurisdiction
+                            </th>
+                            <th md-column md-numeric md-order-by="year" ng-if="ctrl.showColumn('year')">
+                                Year
+                            </th>
+                            <th md-column ng-if="ctrl.showColumn('position')">
+                                Position
+                            </th>
+                            <th md-column md-order-by='citeCount' ng-if="ctrl.showColumn('citeCount')">
+                                # Cites
+                            </th>
+                            <th md-column md-order-by='journalCount' ng-if="ctrl.showColumn('journalCount')">
+                                # Journals
+                            </th>
+                            <th md-column md-order-by='jurisdictionCount' ng-if="ctrl.showColumn('jurisdictionCount')">
+                                # Jurisdictions
+                            </th>
+                            <th md-column md-order-by='caseCount' ng-if="ctrl.showColumn('caseCount')">
+                                # Cases
+                            </th>
+                            <th md-column md-order-by='yearCount' ng-if="ctrl.showColumn('yearCount')">
+                                # Years
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody md-body>
+                        <tr md-row md-select="citation" md-auto-select ng-repeat="citation in ctrl.lastestSearchResults">
+                            <td md-cell ng-if="ctrl.showColumn('cite')">
+                                {{ctrl.generateCite(citation)}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('case')">
+                                <a href="{{&#39;https://api.case.law/v1/cases/&#39; + citation.caseId}}" target="_blank">{{citation.caseName}}</a>
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('jurisdiction')">
+                                {{ctrl.jurisdictionIdToName(citation.jurisdiction)}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('year')">
+                                {{citation.year}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('position')">
+                                <div>[{{citation.startPos}},</div><div> {{citation.endPos}}]</div>
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('citeCount')">
+                                {{citation.citeCount}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('journalCount')">
+                                {{citation.journalCount}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('jurisdictionCount')">
+                                {{citation.jurisdictionCount}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('caseCount')">
+                                {{citation.caseCount}}
+                            </td>
+                            <td md-cell ng-if="ctrl.showColumn('yearCount')">
+                                {{citation.yearCount}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+
+            <md-table-pagination md-limit="ctrl.tableOptions.rowsPerPage"
+                md-limit-options="ctrl.tableOptions.rowOptions"
+                md-page="ctrl.tableOptions.page"
+                md-total="{{ctrl.searchResults.length}}" md-page-select
+                md-on-paginate="ctrl.updateSearchResults()">
+            </md-table-pagination>
+        </div>
+    </div>
+    <div ng-if="ctrl.searchError">
+        <span style="font-size: 22px">Something went wrong with your query.</span>
+    </div>
+</div>
+</body>
