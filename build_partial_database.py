@@ -63,7 +63,8 @@ def extract_citations(src, dst, case_count=None):
                     case['id'], case['name'].replace('"', '""'),
                     case['jurisdiction']['id'],
                     decision_to_year(case['decision_date']),
-                    match.start()+2, match.end()-1))
+                    match.start()+2, match.end()-1,
+                    case['frontend_url']))
                 next_id += 1
 
             if case_count:

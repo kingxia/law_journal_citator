@@ -10,10 +10,10 @@ GROUP_BY_TRANSLATE = {
     'year': 'year'
 }
 SELECT_TRANSLATE = {
-    'case': 'caseId, caseName, jurisdiction, year, count(id), count(distinct journalId)',
-    'cite': 'volume, page, journalId, count(id), count(distinct caseId), count(distinct jurisdiction), count(distinct year)',
-    'jurisdiction': 'jurisdiction, count(id), count(distinct journalId), count(distinct caseId), count(distinct year)',
-    'year': 'year, count(id), count(distinct journalId), count(distinct caseId), count(distinct jurisdiction)'
+    'case': 'caseId, caseName, jurisdiction, year, count(id), count(distinct journalId), frontendUrl',
+    'cite': 'volume, page, journalId, count(id), count(distinct caseId), count(distinct jurisdiction), count(distinct year), frontendUrl',
+    'jurisdiction': 'jurisdiction, count(id), count(distinct journalId), count(distinct caseId), count(distinct year), frontendUrl',
+    'year': 'year, count(id), count(distinct journalId), count(distinct caseId), count(distinct jurisdiction), frontendUrl'
 }
 
 def build_options(request):

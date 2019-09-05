@@ -170,7 +170,7 @@
                                 {{'{{ctrl.generateCite(citation)}}'}}
                             </td>
                             <td md-cell ng-if="ctrl.showColumn('case')">
-                                <a href="{{'{{\'https://api.case.law/v1/cases/\' + citation.caseId}}'}}" target="_blank">{{'{{citation.caseName}}'}}</a>
+                                <a href="{{'{{citation.url}}'}}" target="_blank">{{'{{citation.caseName}}'}}</a>
                             </td>
                             <td md-cell ng-if="ctrl.showColumn('jurisdiction')">
                                 {{'{{ctrl.jurisdictionIdToName(citation.jurisdiction)}}'}}

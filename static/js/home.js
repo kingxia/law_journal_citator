@@ -170,6 +170,7 @@ app.controller('homeController', function($http, $scope) {
             'year': arr[7],
             'startPos': arr[8],
             'endPos': arr[9],
+            'url': arr[10],
         };
     };
     
@@ -181,6 +182,7 @@ app.controller('homeController', function($http, $scope) {
             'year': arr[3],
             'citeCount': arr[4],
             'journalCount': arr[5],
+            'url': arr[6],
         };
     };
     
@@ -193,6 +195,7 @@ app.controller('homeController', function($http, $scope) {
             'caseCount': arr[4],
             'jurisdictionCount': arr[5],
             'yearCount': arr[6],
+            'url': arr[7],
         };
     };
     
@@ -203,6 +206,7 @@ app.controller('homeController', function($http, $scope) {
             'journalCount': arr[2],
             'caseCount': arr[3],
             'yearCount': arr[4],
+            'url': arr[5],
         };
     };
     
@@ -213,6 +217,7 @@ app.controller('homeController', function($http, $scope) {
             'journalCount': arr[2],
             'caseCount': arr[3],
             'jurisdictionCount': arr[4],
+            'url': arr[5],
         };
     };
     

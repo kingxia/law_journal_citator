@@ -31,7 +31,8 @@ def merge_databases(dst, src):
     for row in cite_data:
         write_cursor.execute(INSERT_CITATION % (
             row[0] + next_id, row[1], row[2], row[3], row[4],
-            row[5].replace('"', '""'), row[6], row[7], row[8], row[9]))
+            row[5].replace('"', '""'), row[6], row[7], row[8], row[9],
+            row[10]))
     write_cursor.execute('UPDATE nextIds SET nextId = %d WHERE id = 0' % (next_id + len(cite_data)))
 
     write_to.commit()
