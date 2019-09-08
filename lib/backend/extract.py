@@ -20,6 +20,7 @@ def to_re_spacing(s):
     else:
         s = s.replace('.', '.\\s?')
     s = s.replace('\\s?\\s?', '\\s?')
+    s = s.replace('&', '&amp;')
     return s
 
 def extract_cites(case):
