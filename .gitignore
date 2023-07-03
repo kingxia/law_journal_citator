@@ -1,8 +1,10 @@
 *.pyc
 
 data/jurisdiction/
+data/jurisdiction_old/
 data/logs/
 data/partial_dbs/
+data/partial_dbs_old/
 scripts/data/
 scripts/output/
 

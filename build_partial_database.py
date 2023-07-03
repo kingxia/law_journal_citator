@@ -19,7 +19,9 @@ def create_database(dst):
 def get_all_bulk_data_folders():
     '''Return all the folders stored as data.
     Download folders directly to data/jurisdiction, and extract.
-    e.g. data/jurisdiction/Alabama-20181204-xml.zip.'''
+    e.g. data/jurisdiction/Alabama-20181204-xml.zip.
+    Returns a list of folder names.'''
+    return ['Alaska-20190718-xml']
     return [filename for filename in os.listdir(BULK_DATA_PATH) \
                 if os.path.isdir(os.path.join(BULK_DATA_PATH, filename))]
 

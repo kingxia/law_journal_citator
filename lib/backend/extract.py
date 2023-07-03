@@ -26,8 +26,8 @@ def to_re_spacing(s):
 def extract_cites(case):
     cites = []
 
-    if len([m for m in re.finditer(all_journals_regex(), case['casebody']['data'])]) == 0:
-        return cites
+    #if len([m for m in re.finditer(all_journals_regex(), case['casebody']['data'])]) == 0:
+    #    return cites
 
     for i in JOURNALS:
         j_cites = [m for m in re.finditer(PARENS % (NUMBER_SEPARATED % (to_re_spacing(JOURNALS[i].short))), case['casebody']['data'])]
